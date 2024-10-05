@@ -1,0 +1,41 @@
+---
+- name: Ensure backup directory exists
+  file:
+    path: "{{ backup_dir }}"
+    state: directory
+    mode: '0755'
+  delegate_to: localhost
+
+- name: Backup Lighthouse configuration
+  command: config -e
+  register: config_output
+
+- name: Save configuration to file
+  copy:
+    content: "{{ config_output.stdout }}"
+    dest: "{{ backup_dir }}/lighthouse_config.txt"
+  delegate_to: localhost
+
+- name: Compress backup file
+  archive:
+    path: "{{ backup_dir }}/lighthouse_config.txt"
+    dest: "{{ backup_dir }}/{{ backup_filename }}"
+    format: gz
+  delegate_to: localhost
+
+- name: Remove temporary config file
+  file:
+    path: "{{ backup_dir }}/lighthouse_config.txt"
+    state: absent
+  delegate_to: localhost
+
+- name: Verify backup file exists
+  stat:
+    path: "{{ backup_dir }}/{{ backup_filename }}"
+  register: backup_file
+  delegate_to: localhost
+
+- name: Display backup result
+  debug:
+    msg: "Backup completed successfully. File: {{ backup_dir }}/{{ backup_filename }}"
+  when: backup_file.stat.exists

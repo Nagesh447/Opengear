@@ -1,0 +1,27 @@
+---
+# Backup directory on the Ansible control node
+backup_dir: "/path/to/backup/directory"
+
+# Backup filename format
+backup_filename: "lighthouse_config_backup_{{ ansible_date_time.date }}.tar.gz"
+
+# Temporary file name for storing configuration
+temp_config_file: "lighthouse_config.txt"
+
+# Lighthouse backup command
+lighthouse_backup_command: "config -e"
+
+# File mode for the backup directory
+backup_dir_mode: "0755"
+
+# Default retention period for backups (in days)
+backup_retention_days: 30
+
+# Maximum number of backups to keep
+max_backups: 10
+
+# Whether to compress the backup
+compress_backup: true
+
+# Compression format (gz, bz2, zip)
+compression_format: "gz"

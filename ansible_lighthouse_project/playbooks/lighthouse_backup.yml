@@ -1,0 +1,10 @@
+---
+- name: Backup Opengear Lighthouse Configuration
+  hosts: lighthouse
+  gather_facts: no
+  vars:
+    backup_dir: "/path/to/backup/directory"
+    backup_filename: "lighthouse_config_backup_{{ ansible_date_time.date }}.tar.gz"
+
+  roles:
+    - lighthouse
